@@ -8,10 +8,8 @@ __Разработка приложения "Мини-банк", который 
 
 ![Схема](img/image1.png)
 
-@startuml
-Customer -> Customer:money
+### Диаграмма взаимодействия сервисов
 
-Client -> Service: HTTP-запрос
-Service -> Database: HTTP-запрос
+![Схема2](img/image2.png)
 
-@enduml
+### Дальнейшие шаги по использованию сервиса...
