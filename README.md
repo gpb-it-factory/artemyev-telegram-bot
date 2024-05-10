@@ -1,4 +1,4 @@
-# Artemyev-Nickolay
+# Telegram-bot from GPB-IT-FACTORY "Мини-банк"
 
 __Разработка приложения "Мини-банк", который будет состоять из трёх компонентов:__
 
@@ -6,10 +6,15 @@ __Разработка приложения "Мини-банк", который 
 - middle-слой (java/kotlin-сервис);
 - backend (java/kotlin-сервис).
 
-![Схема](img/image1.png)
+![Схема1](img/image1.png)
 
 ### Диаграмма взаимодействия сервисов
 
 ![Схема2](img/image2.png)
 
 ### Дальнейшие шаги по использованию сервиса...
+...
+### Контакты
+
+- **Telegram:** [@nicknickart](https://t.me/nicknickart)   :blush:
+
