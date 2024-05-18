@@ -1,18 +1,36 @@
 package com.gpb.service;
 
 import com.gpb.config.BotConfig;
-import org.springframework.stereotype.Component;
+import com.gpb.strategy.*;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-@Component
+import java.util.HashMap;
+import java.util.Map;
+
+@Slf4j
+@Service
 public class TelegramBot extends TelegramLongPollingBot {
-    final BotConfig config;
+    private final BotConfig config;
+    private final Map<String, CommandProcessingStrategy> commandStrategies;
 
-    public TelegramBot(BotConfig config) {
+
+    @Autowired
+    public TelegramBot(BotConfig config, Map<String, CommandProcessingStrategy> commandStrategies) {
         this.config = config;
+        this.commandStrategies = initializeCommandStrategies();
+    }
+
+    private Map<String, CommandProcessingStrategy> initializeCommandStrategies() {
+        Map<String, CommandProcessingStrategy> strategies = new HashMap<>();
+        strategies.put("/start", new StartCommandStrategy());
+        strategies.put("/ping", new PingCommandStrategy());
+
+        return strategies;
     }
 
     @Override
@@ -27,43 +45,24 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        if (update.hasMessage() && update.getMessage().hasText()) {
-            String messageText = update.getMessage().getText();
-            long chatId = update.getMessage().getChatId();
-
-            switch (messageText) {
-                case "/start":
-                    startCommandReceived(chatId, update.getMessage().getChat().getFirstName());
-                    break;
-                case "/ping":
-                    pingCommandReceived(chatId);
-                    break;
-                default:
-                    sendMessage(chatId, "Sorry, command was not recognized");
-
-            }
+        if (update.getMessage() == null) {
+            log.info("Received update without a message");
+            return;
+        } else if (update.hasMessage() && update.getMessage().hasText()) {
+            handleMessage(update.getMessage());
         }
     }
 
-    private void startCommandReceived(long chatId, String name) {
-        String answer = "Hello, " + name + " welcome to the bot!";
-        sendMessage(chatId, answer);
-    }
+    private void handleMessage(Message message) {
+        String messageText = message.getText();
+        final StrategyContext strategyContext = new StrategyContext(this);
 
-    private void pingCommandReceived(long chatId) {
-        String answer = "pong";
-        sendMessage(chatId, answer);
-    }
+        CommandProcessingStrategy strategy = commandStrategies.getOrDefault(
+                messageText,
+                new DefaultCommandStrategy()
+        );
 
-    private void sendMessage(long chatId, String textToSend) {
-        SendMessage message = new SendMessage();
-        message.setChatId(String.valueOf(chatId));
-        message.setText(textToSend);
-
-        try {
-            execute(message);
-        } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
-        }
+        strategyContext.setStrategy(strategy);
+        strategyContext.processMessage(message);
     }
 }
