@@ -8,7 +8,7 @@ __Разработка приложения "Мини-банк", который 
 
 ![Схема1](src/main/resources/static/img/image1.png)
 
-### Диаграмма взаимодействия сервисов
+### Архитектура уровней
 
 ![Схема2](src/main/resources/static/img/image2.png)
 

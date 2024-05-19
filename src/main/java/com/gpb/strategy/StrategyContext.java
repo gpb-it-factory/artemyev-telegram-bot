@@ -1,5 +1,6 @@
 package com.gpb.strategy;
 
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -23,7 +24,7 @@ public class StrategyContext {
         sendResponse(message.getChatId(), responseText);
     }
 
-    private void sendResponse(Long chatId, String text) {
+    private void sendResponse(Long chatId,@NonNull String text) {
         SendMessage response = new SendMessage(chatId.toString(), text);
         try {
             bot.execute(response);

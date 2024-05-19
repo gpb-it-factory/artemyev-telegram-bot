@@ -1,6 +1,7 @@
 package com.gpb.service;
 
 import com.gpb.config.BotConfig;
+import com.gpb.constant.BotCommand;
 import com.gpb.strategy.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,6 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final BotConfig config;
     private final Map<String, CommandProcessingStrategy> commandStrategies;
 
-
-    @Autowired
     public TelegramBot(BotConfig config, Map<String, CommandProcessingStrategy> commandStrategies) {
         this.config = config;
         this.commandStrategies = initializeCommandStrategies();
@@ -27,8 +26,8 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private Map<String, CommandProcessingStrategy> initializeCommandStrategies() {
         Map<String, CommandProcessingStrategy> strategies = new HashMap<>();
-        strategies.put("/start", new StartCommandStrategy());
-        strategies.put("/ping", new PingCommandStrategy());
+        strategies.put(BotCommand.START.getCommand(), new StartCommandStrategy());
+        strategies.put(BotCommand.PING.getCommand(), new PingCommandStrategy());
 
         return strategies;
     }
@@ -48,20 +47,20 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (update.getMessage() == null) {
             log.info("Received update without a message");
             return;
-        } else if (update.hasMessage() && update.getMessage().hasText()) {
+        }
+        if (update.hasMessage() && update.getMessage().hasText()) {
             handleMessage(update.getMessage());
         }
     }
 
     private void handleMessage(Message message) {
         String messageText = message.getText();
-        final StrategyContext strategyContext = new StrategyContext(this);
-
         CommandProcessingStrategy strategy = commandStrategies.getOrDefault(
                 messageText,
                 new DefaultCommandStrategy()
         );
 
+        StrategyContext strategyContext = new StrategyContext(this);
         strategyContext.setStrategy(strategy);
         strategyContext.processMessage(message);
     }

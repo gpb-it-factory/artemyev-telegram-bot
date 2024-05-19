@@ -1,10 +1,11 @@
 package com.gpb.strategy;
 
+import com.gpb.constant.BotMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-public final class DefaultCommandStrategy implements CommandProcessingStrategy{
+public final class DefaultCommandStrategy implements CommandProcessingStrategy {
     @Override
     public String process(Message message) {
-        return "Sorry, command was not recognized";
+        return String.format(BotMessage.DEFAULT_MESSAGE.getText());
     }
 }
