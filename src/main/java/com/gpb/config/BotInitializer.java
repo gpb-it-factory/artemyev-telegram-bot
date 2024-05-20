@@ -2,8 +2,7 @@ package com.gpb.config;
 
 import com.gpb.service.TelegramBot;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -11,15 +10,15 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 @Slf4j
 @Component
-public class BotInitializer {
+public class BotInitializer implements CommandLineRunner {
     private final TelegramBot bot;
 
     public BotInitializer(TelegramBot bot) {
         this.bot = bot;
     }
 
-    @EventListener(ApplicationReadyEvent.class)
-    public void init() throws TelegramApiException {
+    @Override
+    public void run(String... args) throws Exception {
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
         try {
             telegramBotsApi.registerBot(bot);
