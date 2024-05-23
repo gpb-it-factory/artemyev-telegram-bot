@@ -15,11 +15,14 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+    all {
+        exclude group: 'commons-logging', module: 'commons-logging'
+    }
 }
 
 repositories {
     mavenCentral()
-    maven { url 'https://jitpack.io' }
+//    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -32,7 +35,9 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
 
     // Telegram Bots API
-    implementation 'com.github.rubenlagus:TelegramBots:5.6.0'
+//    implementation 'com.github.rubenlagus:TelegramBots:5.6.0'
+    implementation 'org.telegram:telegrambots:6.9.7.1'
+
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
@@ -40,3 +45,4 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
