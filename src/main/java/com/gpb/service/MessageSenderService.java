@@ -12,7 +12,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 @Service
 public class MessageSenderService {
 
-    private TelegramLongPollingBot bot;
+    private final TelegramLongPollingBot bot;
 
     public MessageSenderService(@Lazy TelegramLongPollingBot bot) {
         this.bot = bot;

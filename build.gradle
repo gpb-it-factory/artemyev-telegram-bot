@@ -22,7 +22,6 @@ configurations {
 
 repositories {
     mavenCentral()
-//    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -35,7 +34,6 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
 
     // Telegram Bots API
-//    implementation 'com.github.rubenlagus:TelegramBots:5.6.0'
     implementation 'org.telegram:telegrambots:6.9.7.1'
 
 

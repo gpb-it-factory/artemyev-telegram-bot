@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 
 @Component
 public final class DefaultCommand implements CommandStrategy {
-    private MessageSenderService messageSenderService;
+    private final MessageSenderService messageSenderService;
 
     public DefaultCommand(MessageSenderService messageSenderService) {
         this.messageSenderService = messageSenderService;

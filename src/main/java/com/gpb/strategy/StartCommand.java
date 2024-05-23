@@ -9,7 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 
 @Component
 public final class StartCommand implements IdentifiableCommand {
-    private MessageSenderService messageSenderService;
+    private final MessageSenderService messageSenderService;
 
     public StartCommand(MessageSenderService messageSenderService) {
         this.messageSenderService = messageSenderService;
