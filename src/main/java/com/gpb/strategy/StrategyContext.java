@@ -1,5 +1,7 @@
 package com.gpb.strategy;
 
+import com.gpb.exception.MessageProcessingException;
+import com.gpb.exception.MessageSendingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -14,6 +16,10 @@ public class StrategyContext {
     }
 
     public void processMessage(Message message) {
-        strategy.process(message);
+        try {
+            strategy.process(message);
+        } catch (MessageSendingException e) {
+            throw new MessageProcessingException("Error processing message: " + message.getText(), e);
+        }
     }
 }

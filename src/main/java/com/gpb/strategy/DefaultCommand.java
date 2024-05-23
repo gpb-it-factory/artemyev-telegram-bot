@@ -1,6 +1,7 @@
 package com.gpb.strategy;
 
 import com.gpb.constant.BotMessage;
+import com.gpb.exception.MessageSendingException;
 import com.gpb.service.MessageSenderService;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -15,8 +16,11 @@ public final class DefaultCommand implements CommandStrategy {
     }
 
     @Override
-    public SendMessage process(Message message) {
-        return messageSenderService.sendMessage(message.getChatId(), BotMessage.DEFAULT_MESSAGE.getText());
-
+    public SendMessage process(Message message) throws MessageSendingException {
+        try {
+            return messageSenderService.sendMessage(message.getChatId(), BotMessage.DEFAULT_MESSAGE.getText());
+        } catch (Exception e) {
+            throw new MessageSendingException("Error sending message to chatId: " + message.getChatId(), e);
+        }
     }
 }

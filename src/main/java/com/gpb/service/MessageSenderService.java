@@ -1,5 +1,6 @@
 package com.gpb.service;
 
+import com.gpb.exception.MessageSendingException;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
@@ -17,7 +18,7 @@ public class MessageSenderService {
     public MessageSenderService(@Lazy TelegramLongPollingBot bot) {
         this.bot = bot;
     }
-    public SendMessage sendMessage(Long chatId, @NonNull String text) {
+    public SendMessage sendMessage(Long chatId, @NonNull String text) throws MessageSendingException {
         SendMessage message = new SendMessage();
         message.setChatId(chatId.toString());
         message.setText(text);
@@ -26,7 +27,7 @@ public class MessageSenderService {
             return message;
         } catch (TelegramApiException e) {
             log.error("Error sending message to chatId: " + chatId, e);
-            throw new RuntimeException(e);
+            throw new MessageSendingException("Error sending message to chatId: " + chatId, e);
         }
     }
 }
