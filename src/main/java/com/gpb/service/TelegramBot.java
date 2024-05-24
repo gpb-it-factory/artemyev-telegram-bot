@@ -1,12 +1,10 @@
 package com.gpb.service;
 
 import com.gpb.config.BotConfig;
-import com.gpb.strategy.*;
+import com.gpb.exception.MessageSendingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -38,16 +36,13 @@ public class TelegramBot extends TelegramLongPollingBot {
             return;
         }
         if (update.hasMessage() && update.getMessage().hasText()) {
-            handleMessage(update.getMessage());
+            try {
+                execute(commandStrategyHandler.getStrategy(update.getMessage()).process(update));
+            } catch (MessageSendingException e) {
+                log.error("Error processing message: " + update.getMessage().getText(), e);
+            } catch (TelegramApiException e) {
+                log.error("Error sending message: " + update.getMessage().getText(), e);
+            }
         }
-
-    }
-
-    private void handleMessage(Message message) {
-        CommandStrategy strategy = commandStrategyHandler.getStrategy(message);
-
-        StrategyContext strategyContext = new StrategyContext();
-        strategyContext.setStrategy(strategy);
-        strategyContext.processMessage(message);
     }
 }

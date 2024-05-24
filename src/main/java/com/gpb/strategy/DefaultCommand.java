@@ -1,26 +1,19 @@
 package com.gpb.strategy;
 
 import com.gpb.constant.BotMessage;
-import com.gpb.exception.MessageSendingException;
-import com.gpb.service.MessageSenderService;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
 public final class DefaultCommand implements CommandStrategy {
-    private final MessageSenderService messageSenderService;
-
-    public DefaultCommand(MessageSenderService messageSenderService) {
-        this.messageSenderService = messageSenderService;
-    }
 
     @Override
-    public SendMessage process(Message message) throws MessageSendingException {
-        try {
-            return messageSenderService.sendMessage(message.getChatId(), BotMessage.DEFAULT_MESSAGE.getText());
-        } catch (Exception e) {
-            throw new MessageSendingException("Error sending message to chatId: " + message.getChatId(), e);
-        }
+    public SendMessage process(Update update) {
+        String welcomeText = BotMessage.DEFAULT_MESSAGE.getText();
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(update.getMessage().getChatId().toString());
+        sendMessage.setText(welcomeText);
+        return sendMessage;
     }
 }

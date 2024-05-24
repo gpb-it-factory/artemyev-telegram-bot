@@ -1,6 +1,7 @@
 package com.gpb.service;
 
-import com.gpb.strategy.*;
+import com.gpb.strategy.CommandStrategy;
+import com.gpb.strategy.IdentifiableCommand;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -14,11 +15,10 @@ import java.util.Map;
 @Slf4j
 @Component
 public class CommandStrategyHandler {
-    @Qualifier("defaultCommand")
     private final CommandStrategy defaultCommandStrategy;
     private final Map<String, CommandStrategy> commandStrategies = new HashMap<>();
 
-    public CommandStrategyHandler(List<IdentifiableCommand> strategies, DefaultCommand defaultCommand) {
+    public CommandStrategyHandler(List<IdentifiableCommand> strategies, @Qualifier("defaultCommand")CommandStrategy defaultCommand) {
         for (IdentifiableCommand strategy : strategies) {
             String command = strategy.getCommand();
             if (commandStrategies.containsKey(command)) {
