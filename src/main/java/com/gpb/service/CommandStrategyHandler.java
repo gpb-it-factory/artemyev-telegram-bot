@@ -18,15 +18,13 @@ public class CommandStrategyHandler {
     private final CommandStrategy defaultCommandStrategy;
     private final Map<String, CommandStrategy> commandStrategies = new HashMap<>();
 
-    public CommandStrategyHandler(List<IdentifiableCommand> strategies, @Qualifier("defaultCommand")CommandStrategy defaultCommand) {
+    public CommandStrategyHandler(List<IdentifiableCommand> strategies, @Qualifier("defaultCommand") CommandStrategy defaultCommand) {
         for (IdentifiableCommand strategy : strategies) {
             String command = strategy.getCommand();
             if (commandStrategies.containsKey(command)) {
                 log.error("Duplicate strategy for command: " + command);
             }
-            else {
-                commandStrategies.put(command, strategy);
-            }
+            commandStrategies.put(command, strategy);
         }
         this.defaultCommandStrategy = defaultCommand;
     }

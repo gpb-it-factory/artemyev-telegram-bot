@@ -10,11 +10,10 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public final class PingCommand implements IdentifiableCommand {
     @Override
     public SendMessage process(Update update) {
-        String welcomeText = BotMessage.ANSWER_MESSAGE.getText();
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(update.getMessage().getChatId().toString());
-        sendMessage.setText(welcomeText);
-        return sendMessage;
+        return SendMessage.builder()
+                .chatId(update.getMessage().getChatId().toString())
+                .text(BotMessage.ANSWER_MESSAGE.getText())
+                .build();
     }
 
     @Override

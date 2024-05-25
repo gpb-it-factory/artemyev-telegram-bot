@@ -7,13 +7,11 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
 public final class DefaultCommand implements CommandStrategy {
-
     @Override
     public SendMessage process(Update update) {
-        String welcomeText = BotMessage.DEFAULT_MESSAGE.getText();
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(update.getMessage().getChatId().toString());
-        sendMessage.setText(welcomeText);
-        return sendMessage;
+        return SendMessage.builder()
+                .chatId(update.getMessage().getChatId().toString())
+                .text(BotMessage.DEFAULT_MESSAGE.getText())
+                .build();
     }
 }
