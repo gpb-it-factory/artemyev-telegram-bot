@@ -15,6 +15,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final CommandStrategyHandler commandStrategyHandler;
 
     public TelegramBot(BotConfig config, CommandStrategyHandler commandStrategyHandler) {
+        super(config.getToken());
         this.config = config;
         this.commandStrategyHandler = commandStrategyHandler;
     }
@@ -22,11 +23,6 @@ public class TelegramBot extends TelegramLongPollingBot {
     @Override
     public String getBotUsername() {
         return config.getBotName();
-    }
-
-    @Override
-    public String getBotToken() {
-        return config.getToken();
     }
 
     @Override
