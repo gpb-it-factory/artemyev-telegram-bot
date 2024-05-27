@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: artemyev-telegram-bot
+bot:
+    name: abc
+    token: 123
