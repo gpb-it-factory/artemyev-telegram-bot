@@ -1,4 +1,4 @@
-name: build-and-test
+name: base-ci
 on:
   push:
     branches: [ "trunk" ]
@@ -15,5 +15,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'oracle'
-      - name: build and test
-        run: ./gradlew build
+      - name: Build project
+        run: ./gradlew build -x test
+      - name: Test project
+        run: ./gradlew test
