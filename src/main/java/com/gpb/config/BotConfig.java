@@ -1,17 +1,18 @@
 package com.gpb.config;
 
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.bind.ConstructorBinding;
 
-@Configuration
 @Data
+@ConfigurationProperties(prefix = "bot")
 public class BotConfig {
 
     private final String botName;
     private final String token;
 
-    public BotConfig(@Value("${bot.name}") String botName, @Value("${bot.token}") String token) {
+    @ConstructorBinding
+    public BotConfig(String botName, String token) {
         this.botName = botName;
         this.token = token;
     }
