@@ -16,12 +16,8 @@ public class RegistrationService {
     private final RestTemplate restTemplate;
     private static final String REGISTRATION_URL = "http://localhost:8080/api/users";
 
-
-
-
     public Response registerUser(long chatId) {
         Request request = new Request(chatId);
-
         return getResponseEntity(request);
     }
 
@@ -54,13 +50,10 @@ public class RegistrationService {
         HttpStatusCode statusCode = responseEntity.getStatusCode();
         Response responseBody = responseEntity.getBody();
 
-        if (statusCode == HttpStatus.OK && responseBody != null) {
-            log.info("Response: {}", responseBody.getMessage());
-            return responseBody;
-        } else {
-            log.error("Request failed with status: {} and response: {}", statusCode, responseBody);
+        if (responseBody == null || responseBody.getMessage() == null) {
             return new Response("Registration failed with status: " + statusCode);
         }
+        return responseBody;
     }
 
 }
