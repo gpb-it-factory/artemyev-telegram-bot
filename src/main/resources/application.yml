@@ -1,6 +1,8 @@
 spring:
   application:
     name: artemyev-telegram-bot
+server:
+  port: 8081
 bot:
   botName: ${BOT_NAME}
   token: ${BOT_TOKEN}

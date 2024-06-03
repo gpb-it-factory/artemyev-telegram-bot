@@ -2,7 +2,8 @@ package com.gpb.constant;
 
 public enum BotCommand {
     START("/start"),
-    PING("/ping");
+    PING("/ping"),
+    REGISTER("/register");
 
     private final String command;
 
