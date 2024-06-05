@@ -2,8 +2,8 @@ package com.gpb.service;
 
 import com.gpb.entity.Request;
 import com.gpb.entity.Response;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -11,10 +11,14 @@ import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @Service
-@AllArgsConstructor
 public class RegistrationService {
     private final RestTemplate restTemplate;
-    private static final String REGISTRATION_URL = "http://localhost:8080/api/users";
+    private final String registrationUrl;
+
+    public RegistrationService(RestTemplate restTemplate, @Value("${registration.url}") String registrationUrl) {
+        this.restTemplate = restTemplate;
+        this.registrationUrl = registrationUrl;
+    }
 
     public Response registerUser(long chatId) {
         Request request = new Request(chatId);
@@ -29,7 +33,7 @@ public class RegistrationService {
             HttpEntity<Request> entity = new HttpEntity<>(request, headers);
 
             ResponseEntity<Response> responseEntity = restTemplate.exchange(
-                    REGISTRATION_URL,
+                    registrationUrl,
                     HttpMethod.POST,
                     entity,
                     Response.class
