@@ -7,4 +7,6 @@ bot:
   botName: ${BOT_NAME}
   token: ${BOT_TOKEN}
 registration:
-  url: http://localhost:8080/api/users
+  url: http://localhost:8080/v2/users
+account:
+  create-url: http://localhost:8080/v2/users/{id}/accounts
