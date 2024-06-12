@@ -26,7 +26,7 @@ public class AccountServiceTest {
     private RestTemplate restTemplate;
 
     @Value("${account.create-url}")
-    private String createAccountUrl = "http://example.com/createAccount";
+    private String createAccountUrl;
 
     @InjectMocks
     private AccountService accountService;
