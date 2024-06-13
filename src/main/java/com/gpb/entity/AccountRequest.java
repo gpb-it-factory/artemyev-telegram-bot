@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Request {
-    private long userId;
-    private String userName;
+public class AccountRequest {
+    private long chatId;
+    private String accountName;
 }

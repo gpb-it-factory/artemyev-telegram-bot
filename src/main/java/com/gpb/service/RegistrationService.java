@@ -20,8 +20,8 @@ public class RegistrationService {
         this.registrationUrl = registrationUrl;
     }
 
-    public Response registerUser(long chatId) {
-        Request request = new Request(chatId);
+    public Response registerUser(long chatId, String userName) {
+        Request request = new Request(chatId, userName);
         return getResponseEntity(request);
     }
 
@@ -51,13 +51,9 @@ public class RegistrationService {
     }
 
     private static Response handleResponse(ResponseEntity<Response> responseEntity) {
-        HttpStatusCode statusCode = responseEntity.getStatusCode();
-        Response responseBody = responseEntity.getBody();
-
-        if (responseBody == null || responseBody.getMessage() == null) {
-            return new Response("Registration failed with status: " + statusCode);
+        if (responseEntity.getStatusCode().isSameCodeAs(HttpStatus.NO_CONTENT)) {
+            return new Response("Registration successful");
         }
-        return responseBody;
+        return new Response("Registration failed with status " + responseEntity.getStatusCode());
     }
-
 }
