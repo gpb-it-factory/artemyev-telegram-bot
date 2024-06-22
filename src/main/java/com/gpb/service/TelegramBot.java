@@ -46,7 +46,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         try {
             execute(new SetMyCommands(botCommands, new BotCommandScopeDefault(), null));
         } catch (TelegramApiException e) {
-            throw new RuntimeException("Failed to initialize bot commands", e);
+            log.error("Error setting bot commands" + e.getMessage());
         }
     }
 
