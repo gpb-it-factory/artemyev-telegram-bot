@@ -1,5 +1,7 @@
 package com.gpb.handler;
 
+import com.gpb.cache.UserDataCache;
+import com.gpb.constant.BotCommands;
 import com.gpb.strategy.CommandStrategy;
 import com.gpb.strategy.IdentifiableCommand;
 import lombok.extern.slf4j.Slf4j;
@@ -16,9 +18,11 @@ import java.util.Map;
 @Component
 public class CommandStrategyHandler {
     private final CommandStrategy defaultCommandStrategy;
+    private final UserDataCache userDataCache;
     private final Map<String, CommandStrategy> commandStrategies = new HashMap<>();
 
-    public CommandStrategyHandler(List<IdentifiableCommand> strategies, @Qualifier("defaultCommand") CommandStrategy defaultCommand) {
+    public CommandStrategyHandler(List<IdentifiableCommand> strategies, @Qualifier("defaultCommand") CommandStrategy defaultCommand, UserDataCache userDataCache) {
+        this.userDataCache = userDataCache;
         for (IdentifiableCommand strategy : strategies) {
             String command = strategy.getCommand();
             if (commandStrategies.containsKey(command)) {
@@ -33,6 +37,12 @@ public class CommandStrategyHandler {
         String messageText = message.getText();
         if (messageText.startsWith("/")) {
             return commandStrategies.getOrDefault(messageText, defaultCommandStrategy);
+        } else if (userDataCache.getRecipientName(message.getChatId()) != null) {
+            return commandStrategies.get(BotCommands.TRANSFER.getCommand());
+        } else if (userDataCache.getAmount(message.getChatId()) != null) {
+            return commandStrategies.get(BotCommands.TRANSFER.getCommand());
+        } else if (userDataCache.getUserBotState(message.getChatId()) != null) {
+            return commandStrategies.get(BotCommands.TRANSFER.getCommand());
         }
         return defaultCommandStrategy;
     }
