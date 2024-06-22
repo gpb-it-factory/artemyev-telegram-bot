@@ -1,4 +1,4 @@
-package com.gpb.service;
+package com.gpb.handler;
 
 import com.gpb.strategy.CommandStrategy;
 import com.gpb.strategy.IdentifiableCommand;

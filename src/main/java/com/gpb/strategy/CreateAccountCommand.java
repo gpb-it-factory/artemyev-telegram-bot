@@ -1,6 +1,6 @@
 package com.gpb.strategy;
 
-import com.gpb.constant.BotCommand;
+import com.gpb.constant.BotCommands;
 import com.gpb.entity.Response;
 import com.gpb.service.AccountService;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ public class CreateAccountCommand implements IdentifiableCommand {
 
     @Override
     public String getCommand() {
-        return BotCommand.CREATE_ACCOUNT.getCommand();
+        return BotCommands.CREATE_ACCOUNT.getCommand();
     }
 }
 

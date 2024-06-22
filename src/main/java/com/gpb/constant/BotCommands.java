@@ -1,15 +1,16 @@
 package com.gpb.constant;
 
-public enum BotCommand {
+public enum BotCommands {
     START("/start"),
     PING("/ping"),
     REGISTER("/register"),
-    CREATE_ACCOUNT("/createAccount"),
-    CURRENT_BALANCE("/current_balance");
+    CREATE_ACCOUNT("/createaccount"),
+    CURRENT_BALANCE("/current_balance"),
+    TRANSFER ("/transfer");
 
     private final String command;
 
-    BotCommand(String command) {
+    BotCommands(String command) {
         this.command = command;
     }
 
