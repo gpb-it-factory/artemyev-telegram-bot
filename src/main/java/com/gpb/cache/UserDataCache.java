@@ -6,19 +6,21 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+
+
 @Component
 public class UserDataCache {
-    private final Map<Long, String> userBotState = new ConcurrentHashMap<>();
+    private final Map<Long, BotCommands> userBotState = new ConcurrentHashMap<>();
     private final Map<Long, String> recipientName = new ConcurrentHashMap<>();
     private final Map<Long, String> amount = new ConcurrentHashMap<>();
 
 
-    public void setUserBotState(long userId, String botCommands) {
+    public void setUserBotState(long userId, BotCommands botCommands) {
         userBotState.put(userId, botCommands);
     }
 
-    public String getUserBotState(long userId) {
-        return userBotState.getOrDefault(userId, BotCommands.TRANSFER.getCommand());
+    public BotCommands getUserBotState(long userId) {
+        return userBotState.getOrDefault(userId, BotCommands.TRANSFER);
     }
 
     public void setRecipientName(long userId, String name) {

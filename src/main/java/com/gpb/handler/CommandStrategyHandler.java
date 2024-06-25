@@ -35,13 +35,16 @@ public class CommandStrategyHandler {
 
     public CommandStrategy getStrategy(Message message) {
         String messageText = message.getText();
+        long chatId = message.getChatId();
+
         if (messageText.startsWith("/")) {
             return commandStrategies.getOrDefault(messageText, defaultCommandStrategy);
-        } else if (userDataCache.getRecipientName(message.getChatId()) != null) {
-            return commandStrategies.get(BotCommands.TRANSFER.getCommand());
-        } else if (userDataCache.getAmount(message.getChatId()) != null) {
-            return commandStrategies.get(BotCommands.TRANSFER.getCommand());
-        } else if (userDataCache.getUserBotState(message.getChatId()) != null) {
+        }
+        boolean isTransferCommand = userDataCache.getRecipientName(chatId) != null ||
+                userDataCache.getAmount(chatId) != null ||
+                userDataCache.getUserBotState(chatId) != null;
+
+        if (isTransferCommand) {
             return commandStrategies.get(BotCommands.TRANSFER.getCommand());
         }
         return defaultCommandStrategy;

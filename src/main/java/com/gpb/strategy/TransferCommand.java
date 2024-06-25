@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import static com.gpb.constant.BotCommands.*;
+
 
 @Component
 @AllArgsConstructor
@@ -21,47 +23,48 @@ public class TransferCommand implements IdentifiableCommand {
 
         Long chatId = update.getMessage().getChatId();
         String userMessage = update.getMessage().getText();
-        String userState = userDataCache.getUserBotState(chatId);
+        BotCommands userState = userDataCache.getUserBotState(chatId);
 
-        if (userState.equals(BotCommands.TRANSFER.getCommand())) {
+        return switch (userState) {
+            case TRANSFER -> handleTransferState(chatId);
+            case WAITING_FOR_AMOUNT -> handleWaitingForAmountState(chatId, userMessage);
+            case WAITING_CONFIRMATION -> handleWaitingConfirmationState(chatId, userMessage);
+            default -> handleDefaultState(chatId);
+        };
+    }
+    private SendMessage handleTransferState(Long chatId) {
+        userDataCache.setUserBotState(chatId, WAITING_FOR_AMOUNT);
+        return SendMessage.builder()
+                .chatId(chatId.toString())
+                .text("Введите имя получателя...")
+                .build();
+    }
 
-            userDataCache.setUserBotState(chatId, BotCommands.WAITING_FOR_AMOUNT.getCommand());
+    private SendMessage handleWaitingForAmountState(Long chatId, String userMessage) {
+        userDataCache.setRecipientName(chatId, userMessage);
+        userDataCache.setUserBotState(chatId, WAITING_CONFIRMATION);
+        return SendMessage.builder()
+                .chatId(chatId.toString())
+                .text("Введите сумму...")
+                .build();
+    }
 
-            return SendMessage.builder()
-                    .chatId(chatId.toString())
-                    .text("Введите имя получателя...")
-                    .build();
-        } else if (userState.equals(BotCommands.WAITING_FOR_AMOUNT.getCommand())) {
+    private SendMessage handleWaitingConfirmationState(Long chatId, String userMessage) {
+        userDataCache.setAmount(chatId, userMessage);
+        userDataCache.setUserBotState(chatId, START);
+        return SendMessage.builder()
+                .chatId(chatId.toString())
+                .text("Вы действительно хотите выполнить этот перевод?")
+                .build();
+    }
 
-            userDataCache.setRecipientName(chatId, userMessage);
-            userDataCache.setUserBotState(chatId, BotCommands.WAITING_CONFIRMATION.getCommand());
-
-            return SendMessage.builder()
-                    .chatId(chatId.toString())
-                    .text("Введите сумму...")
-                    .build();
-
-        } else if (userState.equals(BotCommands.WAITING_CONFIRMATION.getCommand())) {
-
-            userDataCache.setAmount(chatId, userMessage);
-            userDataCache.setUserBotState(chatId, BotCommands.START.getCommand());
-
-            return SendMessage.builder()
-                    .chatId(chatId.toString())
-                    .text("Вы действительно хотите выполнить этот перевод?")
-                    .build();
-
-        } else {
-            TransferResponse response = transferService.transfer(chatId, userDataCache.getRecipientName(chatId), userDataCache.getAmount(chatId));
-
-            userDataCache.clearUserData(chatId);
-
-            return SendMessage.builder()
-                    .chatId(chatId.toString())
-                    .text(response.getMessage())
-                    .build();
-        }
-
+    private SendMessage handleDefaultState(Long chatId) {
+        TransferResponse response = transferService.transfer(chatId, userDataCache.getRecipientName(chatId), userDataCache.getAmount(chatId));
+        userDataCache.clearUserData(chatId);
+        return SendMessage.builder()
+                .chatId(chatId.toString())
+                .text(response.getMessage())
+                .build();
     }
 
     @Override
