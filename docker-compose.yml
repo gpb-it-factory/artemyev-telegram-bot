@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  my-app-container:
+    image: telegram-bot-image
+    environment:
+      - BOT_NAME=${BOT_NAME}
+      - BOT_TOKEN=${BOT_TOKEN}
+      - REGISTRATION_URL=${REGISTRATION_URL}
+      - ACCOUNT_CREATE_URL=${ACCOUNT_CREATE_URL}
+      - TRANSFER_URL=${TRANSFER_URL}
+    depends_on:
+      - middle-service-container
+    ports:
+      - "8081:8081"
+  middle-service-container:
+    image: middle-image
+    ports:
+      - "8080:8080"
