@@ -40,9 +40,12 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
+jar{
+    manifest{
+        attributes 'Main-Class': 'com.gpb.TelegramBotApplication'
+    }
+}
 
 tasks.named('test') {
     useJUnitPlatform()
 }
-
-

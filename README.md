@@ -20,6 +20,16 @@ __Разработка приложения "Мини-банк", который 
 4. __Сборка проекта__: в терминале выполните команду:  ``` gradle bootJar ``` Это соберет исполняемый JAR-файл в папке `build/libs`
 5. __Запуск приложения__: ``` java -jar build/libs/artemyev-telegam-bot-0.0.1-SNAPSHOT.jar```
 
+### Развертывание через Docker
+- в корне проекта создайте файл с расширением `.env` где будут прописаны переменные окружения:
+ ````
+  ENV
+  BOT_NAME=your bot name
+  BOT_TOKEN=your token
+  REGISTRATION_URL=http://middle-service-container:8080/v2/users
+  ACCOUNT_CREATE_URL=http://middle-service-container:8080/v2/users/{id}/accounts
+  TRANSFER_URL=http://middle-service-container:8080/v2/transfers
+  ````
 
 ### Использование бота
 
