@@ -1,10 +1,12 @@
 spring:
   application:
-    name: artemyev-telegram-bot
+    name: artemyev-draft-telegram
 bot:
-    name: abc
-    token: 123
+  botName: abc
+  token: 123
 registration:
-    url: http://localhost:8080/v2/users
+  url: http://localhost:8080/v2/users
 account:
   create-url: http://localhost:8080/v2/users/{id}/accounts
+transfer:
+  url: http://localhost:8080/v2/transfers

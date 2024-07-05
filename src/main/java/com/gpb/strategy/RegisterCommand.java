@@ -1,6 +1,6 @@
 package com.gpb.strategy;
 
-import com.gpb.constant.BotCommand;
+import com.gpb.constant.BotCommands;
 import com.gpb.entity.Response;
 import com.gpb.service.RegistrationService;
 import org.springframework.stereotype.Component;
@@ -29,6 +29,6 @@ public final class RegisterCommand implements IdentifiableCommand {
 
     @Override
     public String getCommand() {
-        return BotCommand.REGISTER.getCommand();
+        return BotCommands.REGISTER.getCommand();
     }
 }

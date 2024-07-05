@@ -1,6 +1,6 @@
 package com.gpb.strategy;
 
-import com.gpb.constant.BotCommand;
+import com.gpb.constant.BotCommands;
 import com.gpb.constant.BotMessage;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -19,7 +19,7 @@ public final class StartCommand implements IdentifiableCommand {
 
     @Override
     public String getCommand() {
-        return BotCommand.START.getCommand();
+        return BotCommands.START.getCommand();
     }
 
 
